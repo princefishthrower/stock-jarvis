@@ -1,3 +1,5 @@
+name: Deploy To Server
+
 on:
   push:
     branches:
@@ -9,4 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Clone on server
-        run: ssh -i ${{ secrets.KEY }} ${{ secrets.USER }}@${{ secrets.SERVER }} && cd ${{ secrets.DIRECTORY }} && git pull 
+        uses: fifsky/ssh-action@master
+        with:
+          command: |
+            cd ${{ secrets.DIRECTORY }}
+            git pull
+          host: ${{ secrets.HOST }}
+          user: ${{ secrets.USER }}
+          key: ${{ secrets.PRIVATE_KEY }}
