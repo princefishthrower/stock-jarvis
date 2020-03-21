@@ -1,10 +1,13 @@
 #!/usr/bin/python
 
+import os
 import sys
 import json
 from FinvizTicker import FinvizTicker
 
+dirpath = os.getcwd()
+
 stockData = FinvizTicker(sys.argv[1])
-with open('/Users/chris/projects/stock-jarvis/data/metrics.json', 'w') as f:
+with open(dirpath + '/data/metrics.json', 'w') as f:
     json.dump(stockData.metrics, f)
 print('Done');
