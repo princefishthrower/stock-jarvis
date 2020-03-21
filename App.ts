@@ -1,6 +1,7 @@
 import fs from "fs";
 import util from "util";
 import textToSpeech from "@google-cloud/text-to-speech";
+import env from './env/.env.json';
 
 const spawn = require("child_process").spawn;
 
@@ -86,6 +87,6 @@ export default class App {
     await writeFile(App.mp3FilePath, response.audioContent, "binary");
   }
   public async emitMP3() {
-    spawn("open", [App.mp3FilePath]);
+    spawn(env.MP3_COMMAND, [App.mp3FilePath]);
   }
 }
