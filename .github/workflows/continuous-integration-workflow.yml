@@ -10,13 +10,15 @@ jobs:
     name: build
     runs-on: ubuntu-latest
     steps:
-      - name: Clone on server
-        uses: fifsky/ssh-action@master
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@master
         with:
-          command: |
-            cd /home/pi/projects/stock-jarvis
-            git pull
           host: ${{ secrets.HOST }}
-          user: ${{ secrets.USER }}
-          key: ${{ secrets.PRIVATE_KEY }}
-          args: "-vvv"
+          username: ${{ secrets.USER }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd /home/pi/projects/stock-jarvis
+            echo 'ok im here'
+            git pull
+            echo 'ok pull succesfull'
