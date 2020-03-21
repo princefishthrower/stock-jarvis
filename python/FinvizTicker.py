@@ -3,7 +3,7 @@
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
-from dateutil.tz import tzlocal
+from tzlocal import get_localzone
 
 class FinvizTicker:
 
@@ -17,11 +17,11 @@ class FinvizTicker:
         # Download the ticker, and parse using beautiful soup
         html = requests.get(self.url)
         self._data = BeautifulSoup(html.content, features="html.parser")
-        self.time_stamp = datetime.now(tzlocal())
+        self.time_stamp = datetime.now(get_localzone())
 
         # Check if the page exists
-        if 'We cover only stocks and ETFs listed on NYSE, NASDAQ, and AMEX. International and OTC/PK are not available.' in html.content:
-            raise ImportError('Stock ticker \'' + self.ticker + '\' does not exist in the Finviz database.')
+        # if 'We cover only stocks and ETFs listed on NYSE, NASDAQ, and AMEX. International and OTC/PK are not available.' in html.content:
+        #     raise ImportError('Stock ticker \'' + self.ticker + '\' does not exist in the Finviz database.')
 
         # Parse the html and create the metrics dictionary
         self.metrics = self._get_metrics()

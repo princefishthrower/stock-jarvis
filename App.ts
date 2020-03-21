@@ -55,7 +55,7 @@ export default class App {
     await this.emitMP3();
   }
   public async getFinvizData(ticker: string): Promise<void> {
-    const pythonProcess = spawn("python", [
+    const pythonProcess = spawn("python3", [
       "python/getTickerMetrics.py",
       ticker
     ]);
