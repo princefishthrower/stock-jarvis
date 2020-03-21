@@ -42,6 +42,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var fs_1 = __importDefault(require("fs"));
 var util_1 = __importDefault(require("util"));
 var text_to_speech_1 = __importDefault(require("@google-cloud/text-to-speech"));
+var _env_json_1 = __importDefault(require("./env/.env.json"));
 var spawn = require("child_process").spawn;
 var App = /** @class */ (function () {
     function App() {
@@ -105,7 +106,7 @@ var App = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             var pythonProcess;
             return __generator(this, function (_a) {
-                pythonProcess = spawn("python", [
+                pythonProcess = spawn("python3", [
                     "python/getTickerMetrics.py",
                     ticker
                 ]);
@@ -150,7 +151,7 @@ var App = /** @class */ (function () {
     App.prototype.emitMP3 = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                spawn("open", [App.mp3FilePath]);
+                spawn(_env_json_1.default.MP3_COMMAND, [App.mp3FilePath]);
                 return [2 /*return*/];
             });
         });
