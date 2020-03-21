@@ -19,9 +19,9 @@ class FinvizTicker:
         self._data = BeautifulSoup(html.content, features="html.parser")
         self.time_stamp = datetime.now(get_localzone())
 
-        # Check if the page exists
-        # if 'We cover only stocks and ETFs listed on NYSE, NASDAQ, and AMEX. International and OTC/PK are not available.' in html.content:
-        #     raise ImportError('Stock ticker \'' + self.ticker + '\' does not exist in the Finviz database.')
+        # Check if the page exists - note b for bytes like object
+        if b'We cover only stocks and ETFs listed on NYSE, NASDAQ, and AMEX. International and OTC/PK are not available.' in html.content:
+            raise ImportError('Stock ticker \'' + self.ticker + '\' does not exist in the Finviz database.')
 
         # Parse the html and create the metrics dictionary
         self.metrics = self._get_metrics()

@@ -1,0 +1,12 @@
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: build
+    run-on: ubuntu-latest
+    steps:
+      - name: Clone on server
+        run: ssh -i ${{ secrets.KEY }} ${{ secrets.USER }}@${{ secrets.SERVER }} && cd ${{ secrets.DIRECTORY }} && git pull 
