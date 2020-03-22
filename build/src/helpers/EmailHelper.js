@@ -64,7 +64,7 @@ var EmailHelper = /** @class */ (function () {
                     subject: ticker +
                         " is " +
                         direction +
-                        " " +
+                        " $" +
                         notificationPrice +
                         " at $" +
                         currentPrice,
@@ -76,7 +76,6 @@ var EmailHelper = /** @class */ (function () {
                         : "No additional message tied to this price trigger. This email was issued by Ye Old Stock Tracker™"
                 };
                 smtpTransport.sendMail(mailOptions, function (error, response) {
-                    error ? console.log(error) : console.log(response);
                     smtpTransport.close();
                 });
                 return [2 /*return*/];

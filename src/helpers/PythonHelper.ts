@@ -14,18 +14,15 @@ export default class PythonHelper {
             ticker
         ]);
         return new Promise((resolve, reject) => {
-            pythonProcess.stdout.on("data", (data: any) => {
-                console.log("SUCCESS");
-                console.log(data.toString());
-                const metrics = fs.readFileSync(
-                    "data/" + updateFolderType + "/" + ticker + ".json"
-                );
-                resolve(JSON.parse(metrics.toString()));
-            });
-            pythonProcess.stderr.on("data", (data: any) => {
-                console.log("ERROR");
-                console.log(data.toString());
-                reject();
+            pythonProcess.on("exit", (code: number) => {
+                if (code === 0) {
+                    const metrics = fs.readFileSync(
+                        "data/" + updateFolderType + "/" + ticker + ".json"
+                    );
+                    resolve(JSON.parse(metrics.toString()));
+                } else {
+                    reject();
+                }
             });
         });
     }

@@ -5,30 +5,30 @@
         "notificationTickers": [
             {
                 "ticker": "SPY",
-                "belowPrice": 215,
-                "abovePrice": 240
+                "belowPrice": 215.00,
+                "abovePrice": 240.00
             },
             {
                 "ticker": "UBER",
-                "belowPrice": 20,
-                "abovePrice": 23
+                "belowPrice": 20.00,
+                "abovePrice": 23.00
             },
             {
                 "ticker": "LYFT",
-                "belowPrice": 20,
-                "abovePrice": 23
+                "belowPrice": 20.00,
+                "abovePrice": 23.00
             },
             {
                 "ticker": "V",
-                "belowPrice": 140,
+                "belowPrice": 140.00,
                 "abovePrice": 178.35,
-                "aboveMessage": "This is above your average cost on Robinhood! Sell that bitch!"
+                "aboveMessage": "This is above your average cost on Robinhood! Sell that shit!"
             },
             {
                 "ticker": "MSFT",
-                "belowPrice": 140,
+                "belowPrice": 140.00,
                 "abovePrice": 160.72,
-                "aboveMessage": "This is above your average cost on Robinhood! Sell that bitch!"
+                "aboveMessage": "This is above your average cost on Robinhood! Sell that shit!"
             }
         ],
         "minuteInterval": 1
