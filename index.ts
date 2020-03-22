@@ -1,15 +1,23 @@
-import cron from 'node-cron';
-import App from './App';
+import cron from "node-cron";
+import App from "./src/App";
+import settings from './settings.json';
 
 // The initial bootstrap class
 const app = new App();
 
-// Pi already runs on EDT
-// “At every 15th minute past every hour from 9 through 18 on every day-of-week from Monday through Friday.”
-cron.schedule('*/15 9-18 * * 1-5', async () => {
-    await app.run();
-});
+// Raspberry Pi system timezone is in EST, same as the market
 
-// cron.schedule('* * * * *', async () => {
-//     await app.run();
+// “At every nth minute past every hour from 9 through 18 on every day-of-week from Monday through Friday.”
+// cron.schedule("*/" + settings.audioUpdate.minuteInterval + " 9-18 * * 1-5", async () => {
+//     await app.runQuarterHourReading();
 // });
+
+// // “At every nth minute past every hour from 9 through 18 on every day-of-week from Monday through Friday.”
+// cron.schedule("*/" + settings.notificationUpdate.minuteInterval + " 9-18 * * 1-5", async () => {
+//     await app.runNotificationCheck();
+// });
+
+
+cron.schedule("* * * * *", async () => {
+    await app.runNotificationCheck();
+});

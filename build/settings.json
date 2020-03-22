@@ -1,0 +1,36 @@
+{
+    "username": "Chris",
+    "audioUpdate": { "tickers": ["SPY"], "minuteInterval": 15 },
+    "notificationUpdate": {
+        "notificationTickers": [
+            {
+                "ticker": "SPY",
+                "belowPrice": 215,
+                "abovePrice": 240
+            },
+            {
+                "ticker": "UBER",
+                "belowPrice": 20,
+                "abovePrice": 23
+            },
+            {
+                "ticker": "LYFT",
+                "belowPrice": 20,
+                "abovePrice": 23
+            },
+            {
+                "ticker": "V",
+                "belowPrice": 140,
+                "abovePrice": 178.35,
+                "aboveMessage": "This is above your average cost on Robinhood! Sell that bitch!"
+            },
+            {
+                "ticker": "MSFT",
+                "belowPrice": 140,
+                "abovePrice": 160.72,
+                "aboveMessage": "This is above your average cost on Robinhood! Sell that bitch!"
+            }
+        ],
+        "minuteInterval": 1
+    }
+}
