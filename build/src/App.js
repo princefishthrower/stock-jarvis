@@ -39,17 +39,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var PythonHelper_1 = __importDefault(require("./helpers/PythonHelper"));
+var FinvizService_1 = __importDefault(require("./services/FinvizService"));
 var AudioHelper_1 = __importDefault(require("./helpers/AudioHelper"));
 var EmailHelper_1 = __importDefault(require("./helpers/EmailHelper"));
 var settings_json_1 = __importDefault(require("../settings.json"));
-var UpdateType_1 = require("./enums/UpdateType");
 var App = /** @class */ (function () {
     function App() {
     }
     App.prototype.runQuarterHourReading = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var now, hour, minute, textToRead, finvizMetrics, direction;
+            var now, hour, minute, textToRead, tickerData, direction;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -75,12 +74,13 @@ var App = /** @class */ (function () {
                         else if (hour > 18) {
                             textToRead += "After hours trading has closed. ";
                         }
-                        return [4 /*yield*/, PythonHelper_1.default.getFinvizMetrics(UpdateType_1.UpdateType.AUDIO_UPDATE, settings_json_1.default.audioUpdate.tickers[0])];
+                        tickerData = new FinvizService_1.default(settings_json_1.default.audioUpdate.tickers[0]);
+                        return [4 /*yield*/, tickerData.setMetrics()];
                     case 1:
-                        finvizMetrics = _a.sent();
-                        direction = finvizMetrics.Change &&
-                            finvizMetrics.Change.length > 0 &&
-                            finvizMetrics.Change[0] === "-"
+                        _a.sent();
+                        direction = tickerData.metrics.Change &&
+                            tickerData.metrics.Change.length > 0 &&
+                            tickerData.metrics.Change[0] === "-"
                             ? "down"
                             : "up";
                         textToRead +=
@@ -88,9 +88,9 @@ var App = /** @class */ (function () {
                                 " is trading " +
                                 direction +
                                 " " +
-                                finvizMetrics.Change.slice(1, finvizMetrics.Change.length) +
+                                tickerData.metrics.Change.slice(1, tickerData.metrics.Change.length) +
                                 ", at " +
-                                finvizMetrics.Price +
+                                tickerData.metrics.Price +
                                 ". ";
                         return [4 /*yield*/, AudioHelper_1.default.createMP3(textToRead)];
                     case 2:
@@ -110,18 +110,20 @@ var App = /** @class */ (function () {
             return __generator(this, function (_a) {
                 notificationTickers = settings_json_1.default.notificationUpdate.notificationTickers;
                 notificationTickers.forEach(function (notificationTicker) { return __awaiter(_this, void 0, void 0, function () {
-                    var finvizMetrics, price;
+                    var tickerData, price;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
-                            case 0: return [4 /*yield*/, PythonHelper_1.default.getFinvizMetrics(UpdateType_1.UpdateType.NOTIFICATION_UPDATE, notificationTicker.ticker)];
+                            case 0:
+                                tickerData = new FinvizService_1.default(notificationTicker.ticker);
+                                return [4 /*yield*/, tickerData.setMetrics()];
                             case 1:
-                                finvizMetrics = _a.sent();
-                                price = parseFloat(finvizMetrics.Price);
+                                _a.sent();
+                                price = parseFloat(tickerData.metrics.Price);
                                 if (price > notificationTicker.abovePrice) {
-                                    EmailHelper_1.default.sendNotificationEmail(notificationTicker.ticker, "above", notificationTicker.abovePrice.toString(), finvizMetrics.Price, (notificationTicker.aboveMessage = undefined !== null && undefined !== void 0 ? undefined : ""));
+                                    EmailHelper_1.default.sendNotificationEmail(notificationTicker.ticker, "above", notificationTicker.abovePrice.toString(), tickerData.metrics.Price, (notificationTicker.aboveMessage = undefined !== null && undefined !== void 0 ? undefined : ""));
                                 }
                                 if (price < notificationTicker.belowPrice) {
-                                    EmailHelper_1.default.sendNotificationEmail(notificationTicker.ticker, "below", notificationTicker.belowPrice.toString(), finvizMetrics.Price, (notificationTicker.belowMessage = undefined !== null && undefined !== void 0 ? undefined : ""));
+                                    EmailHelper_1.default.sendNotificationEmail(notificationTicker.ticker, "below", notificationTicker.belowPrice.toString(), tickerData.metrics.Price, (notificationTicker.belowMessage = undefined !== null && undefined !== void 0 ? undefined : ""));
                                 }
                                 return [2 /*return*/];
                         }

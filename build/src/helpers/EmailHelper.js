@@ -52,9 +52,9 @@ var EmailHelper = /** @class */ (function () {
                     auth: {
                         type: "OAuth2",
                         user: "frewin.christopher@gmail.com",
-                        clientId: process.env.CHRISFREW_IN_GMAIL_API_CLIENT_ID,
-                        clientSecret: process.env.CHRISFREW_IN_GMAIL_API_CLIENT_SECRET,
-                        refreshToken: process.env.CHRISFREW_IN_GMAIL_API_REFRESH_TOKEN,
+                        clientId: process.env.CHRISFREW_IN_OAUTH_2_CLIENT_ID,
+                        clientSecret: process.env.CHRISFREW_IN_OAUTH_2_CLIENT_SECRET,
+                        refreshToken: process.env.CHRISFREW_IN_OAUTH_2_REFRESH_TOKEN,
                         accessToken: accessToken
                     }
                 });

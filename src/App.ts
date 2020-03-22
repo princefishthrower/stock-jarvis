@@ -1,9 +1,8 @@
-import PythonHelper from "./helpers/PythonHelper";
+import FinvizService from "./services/FinvizService";
 import AudioHelper from "./helpers/AudioHelper";
 import EmailHelper from "./helpers/EmailHelper";
 import settings from "../settings.json";
 import INotificationTicker from "./interfaces/INotificationTicker";
-import { UpdateType } from "./enums/UpdateType";
 
 export default class App {
     public async runQuarterHourReading(): Promise<void> {
@@ -28,17 +27,15 @@ export default class App {
             textToRead += "After hours trading has closed. ";
         }
 
-        // Write SPY data to JSON via python script
-        const finvizMetrics = await PythonHelper.getFinvizMetrics(
-            UpdateType.AUDIO_UPDATE,
-            settings.audioUpdate.tickers[0]
-        );
+        // Get finviz SPY data as javascript process
+        const tickerData = new FinvizService(settings.audioUpdate.tickers[0]);
+        await tickerData.setMetrics();
 
         // determine direction to say
         const direction =
-            finvizMetrics.Change &&
-            finvizMetrics.Change.length > 0 &&
-            finvizMetrics.Change[0] === "-"
+            tickerData.metrics.Change &&
+            tickerData.metrics.Change.length > 0 &&
+            tickerData.metrics.Change[0] === "-"
                 ? "down"
                 : "up";
 
@@ -47,9 +44,12 @@ export default class App {
             " is trading " +
             direction +
             " " +
-            finvizMetrics.Change.slice(1, finvizMetrics.Change.length) +
+            tickerData.metrics.Change.slice(
+                1,
+                tickerData.metrics.Change.length
+            ) +
             ", at " +
-            finvizMetrics.Price +
+            tickerData.metrics.Price +
             ". ";
 
         await AudioHelper.createMP3(textToRead);
@@ -61,18 +61,16 @@ export default class App {
             settings.notificationUpdate.notificationTickers;
 
         notificationTickers.forEach(async notificationTicker => {
-            const finvizMetrics = await PythonHelper.getFinvizMetrics(
-                UpdateType.NOTIFICATION_UPDATE,
-                notificationTicker.ticker
-            );
-            const price = parseFloat(finvizMetrics.Price);
-            
+            const tickerData = new FinvizService(notificationTicker.ticker);
+            await tickerData.setMetrics();
+            const price = parseFloat(tickerData.metrics.Price);
+
             if (price > notificationTicker.abovePrice) {
                 EmailHelper.sendNotificationEmail(
                     notificationTicker.ticker,
                     "above",
                     notificationTicker.abovePrice.toString(),
-                    finvizMetrics.Price,
+                    tickerData.metrics.Price,
                     (notificationTicker.aboveMessage = undefined ?? "")
                 );
             }
@@ -81,7 +79,7 @@ export default class App {
                     notificationTicker.ticker,
                     "below",
                     notificationTicker.belowPrice.toString(),
-                    finvizMetrics.Price,
+                    tickerData.metrics.Price,
                     (notificationTicker.belowMessage = undefined ?? "")
                 );
             }

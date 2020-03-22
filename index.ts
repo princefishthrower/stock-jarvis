@@ -1,6 +1,7 @@
 import cron from "node-cron";
 import App from "./src/App";
 import settings from './settings.json';
+import FinvizService from './src/services/FinvizService';
 
 // The initial bootstrap class
 const app = new App();
@@ -17,6 +18,14 @@ const app = new App();
 //     await app.runNotificationCheck();
 // });
 
-cron.schedule("*/10 * * * *", async () => {
+cron.schedule("*/1 * * * *", async () => {
     await app.runNotificationCheck();
 });
+
+// async function test(): Promise<void> {
+//     const tickerSPY = new FinvizService('SPY');
+//     await tickerSPY.setMetrics();
+//     console.log(JSON.stringify(tickerSPY.metrics));
+//     console.log(JSON.stringify(tickerSPY.metrics.Change));
+// }
+// test();
