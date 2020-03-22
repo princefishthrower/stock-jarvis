@@ -116,8 +116,6 @@ var App = /** @class */ (function () {
                             case 0: return [4 /*yield*/, PythonHelper_1.default.getFinvizMetrics(UpdateType_1.UpdateType.NOTIFICATION_UPDATE, notificationTicker.ticker)];
                             case 1:
                                 finvizMetrics = _a.sent();
-                                console.log(notificationTicker);
-                                console.log(finvizMetrics.Price);
                                 price = parseFloat(finvizMetrics.Price);
                                 if (price > notificationTicker.abovePrice) {
                                     EmailHelper_1.default.sendNotificationEmail(notificationTicker.ticker, "above", notificationTicker.abovePrice.toString(), finvizMetrics.Price, (notificationTicker.aboveMessage = undefined !== null && undefined !== void 0 ? undefined : ""));

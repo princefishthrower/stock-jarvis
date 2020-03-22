@@ -65,8 +65,6 @@ export default class App {
                 UpdateType.NOTIFICATION_UPDATE,
                 notificationTicker.ticker
             );
-            console.log(notificationTicker);
-            console.log(finvizMetrics.Price);
             const price = parseFloat(finvizMetrics.Price);
             
             if (price > notificationTicker.abovePrice) {
