@@ -31,7 +31,7 @@ export default class EmailHelper {
                 ticker +
                 " is " +
                 direction +
-                " " +
+                " $" +
                 notificationPrice +
                 " at $" +
                 currentPrice,
@@ -45,7 +45,6 @@ export default class EmailHelper {
         };
 
         smtpTransport.sendMail(mailOptions, (error: any, response: any) => {
-            error ? console.log(error) : console.log(response);
             smtpTransport.close();
         });
     }

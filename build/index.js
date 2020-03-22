@@ -48,11 +48,11 @@ var app = new App_1.default();
 // cron.schedule("*/" + settings.audioUpdate.minuteInterval + " 9-18 * * 1-5", async () => {
 //     await app.runQuarterHourReading();
 // });
-// // “At every nth minute past every hour from 9 through 18 on every day-of-week from Monday through Friday.”
+// “At every nth minute past every hour from 9 through 18 on every day-of-week from Monday through Friday.”
 // cron.schedule("*/" + settings.notificationUpdate.minuteInterval + " 9-18 * * 1-5", async () => {
 //     await app.runNotificationCheck();
 // });
-node_cron_1.default.schedule("* * * * *", function () { return __awaiter(void 0, void 0, void 0, function () {
+node_cron_1.default.schedule("*/5 * * * *", function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, app.runNotificationCheck()];

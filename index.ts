@@ -12,12 +12,11 @@ const app = new App();
 //     await app.runQuarterHourReading();
 // });
 
-// // “At every nth minute past every hour from 9 through 18 on every day-of-week from Monday through Friday.”
+// “At every nth minute past every hour from 9 through 18 on every day-of-week from Monday through Friday.”
 // cron.schedule("*/" + settings.notificationUpdate.minuteInterval + " 9-18 * * 1-5", async () => {
 //     await app.runNotificationCheck();
 // });
 
-
-cron.schedule("* * * * *", async () => {
+cron.schedule("*/5 * * * *", async () => {
     await app.runNotificationCheck();
 });
