@@ -17,6 +17,6 @@ const app = new App();
 //     await app.runNotificationCheck();
 // });
 
-cron.schedule("*/5 * * * *", async () => {
+cron.schedule("*/10 * * * *", async () => {
     await app.runNotificationCheck();
 });
