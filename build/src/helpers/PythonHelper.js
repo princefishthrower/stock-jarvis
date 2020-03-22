@@ -39,26 +39,36 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var node_cron_1 = __importDefault(require("node-cron"));
-var App_1 = __importDefault(require("./src/App"));
-// The initial bootstrap class
-var app = new App_1.default();
-// Raspberry Pi system timezone is in EST, same as the market
-// “At every nth minute past every hour from 9 through 18 on every day-of-week from Monday through Friday.”
-// cron.schedule("*/" + settings.audioUpdate.minuteInterval + " 9-18 * * 1-5", async () => {
-//     await app.runQuarterHourReading();
-// });
-// // “At every nth minute past every hour from 9 through 18 on every day-of-week from Monday through Friday.”
-// cron.schedule("*/" + settings.notificationUpdate.minuteInterval + " 9-18 * * 1-5", async () => {
-//     await app.runNotificationCheck();
-// });
-node_cron_1.default.schedule("* * * * *", function () { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, app.runNotificationCheck()];
-            case 1:
-                _a.sent();
-                return [2 /*return*/];
-        }
-    });
-}); });
+var fs_1 = __importDefault(require("fs"));
+var spawn = require("child_process").spawn;
+var PythonHelper = /** @class */ (function () {
+    function PythonHelper() {
+    }
+    PythonHelper.getFinvizMetrics = function (updateFolderType, ticker) {
+        return __awaiter(this, void 0, void 0, function () {
+            var pythonProcess;
+            return __generator(this, function (_a) {
+                pythonProcess = spawn("python3", [
+                    "src/python/getTickerMetrics.py",
+                    updateFolderType,
+                    ticker
+                ]);
+                return [2 /*return*/, new Promise(function (resolve, reject) {
+                        pythonProcess.stdout.on("data", function (data) {
+                            console.log('SUCCESS');
+                            console.log(data.toString());
+                            var metrics = fs_1.default.readFileSync("data/" + updateFolderType + "/" + ticker + ".json");
+                            resolve(JSON.parse(metrics.toString()));
+                        });
+                        pythonProcess.stderr.on("data", function (data) {
+                            console.log('ERROR');
+                            console.log(data.toString());
+                            reject();
+                        });
+                    })];
+            });
+        });
+    };
+    return PythonHelper;
+}());
+exports.default = PythonHelper;

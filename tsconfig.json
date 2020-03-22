@@ -7,6 +7,6 @@
     "esModuleInterop": true /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */,
     "resolveJsonModule": true
   },
-  "exclude": ["node_modules", "python"],
-  "include": ["*.ts"]
+  "exclude": ["node_modules", "src/python"],
+  "include": ["*.ts", "src/App.ts"]
 }

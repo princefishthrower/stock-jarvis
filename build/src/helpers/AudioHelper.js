@@ -39,26 +39,51 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var node_cron_1 = __importDefault(require("node-cron"));
-var App_1 = __importDefault(require("./src/App"));
-// The initial bootstrap class
-var app = new App_1.default();
-// Raspberry Pi system timezone is in EST, same as the market
-// “At every nth minute past every hour from 9 through 18 on every day-of-week from Monday through Friday.”
-// cron.schedule("*/" + settings.audioUpdate.minuteInterval + " 9-18 * * 1-5", async () => {
-//     await app.runQuarterHourReading();
-// });
-// // “At every nth minute past every hour from 9 through 18 on every day-of-week from Monday through Friday.”
-// cron.schedule("*/" + settings.notificationUpdate.minuteInterval + " 9-18 * * 1-5", async () => {
-//     await app.runNotificationCheck();
-// });
-node_cron_1.default.schedule("* * * * *", function () { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, app.runNotificationCheck()];
-            case 1:
-                _a.sent();
+var fs_1 = __importDefault(require("fs"));
+var util_1 = __importDefault(require("util"));
+var text_to_speech_1 = __importDefault(require("@google-cloud/text-to-speech"));
+var _env_json_1 = __importDefault(require("../env/.env.json"));
+var spawn = require("child_process").spawn;
+var AudioHelper = /** @class */ (function () {
+    function AudioHelper() {
+    }
+    AudioHelper.createMP3 = function (textToRead) {
+        return __awaiter(this, void 0, void 0, function () {
+            var request, response, writeFile;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        request = {
+                            input: { text: textToRead },
+                            voice: {
+                                languageCode: "en-GB",
+                                name: "en-GB-Wavenet-C",
+                                ssmlGender: 2 // 2 = FEMALE
+                            },
+                            audioConfig: { audioEncoding: 2 } // 2 = MP3
+                        };
+                        return [4 /*yield*/, AudioHelper.client.synthesizeSpeech(request)];
+                    case 1:
+                        response = (_a.sent())[0];
+                        writeFile = util_1.default.promisify(fs_1.default.writeFile);
+                        return [4 /*yield*/, writeFile(AudioHelper.mp3FilePath, response.audioContent, "binary")];
+                    case 2:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    AudioHelper.emitMP3 = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                spawn(_env_json_1.default.MP3_COMMAND, [AudioHelper.mp3FilePath]);
                 return [2 /*return*/];
-        }
-    });
-}); });
+            });
+        });
+    };
+    AudioHelper.client = new text_to_speech_1.default.TextToSpeechClient();
+    AudioHelper.mp3FilePath = "audio/audio.mp3";
+    return AudioHelper;
+}());
+exports.default = AudioHelper;
