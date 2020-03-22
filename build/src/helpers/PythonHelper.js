@@ -55,13 +55,13 @@ var PythonHelper = /** @class */ (function () {
                 ]);
                 return [2 /*return*/, new Promise(function (resolve, reject) {
                         pythonProcess.stdout.on("data", function (data) {
-                            console.log('SUCCESS');
+                            console.log("SUCCESS");
                             console.log(data.toString());
                             var metrics = fs_1.default.readFileSync("data/" + updateFolderType + "/" + ticker + ".json");
                             resolve(JSON.parse(metrics.toString()));
                         });
                         pythonProcess.stderr.on("data", function (data) {
-                            console.log('ERROR');
+                            console.log("ERROR");
                             console.log(data.toString());
                             reject();
                         });
