@@ -52,7 +52,7 @@ var app = new App_1.default();
 // cron.schedule("*/" + settings.notificationUpdate.minuteInterval + " 9-18 * * 1-5", async () => {
 //     await app.runNotificationCheck();
 // });
-node_cron_1.default.schedule("*/5 * * * *", function () { return __awaiter(void 0, void 0, void 0, function () {
+node_cron_1.default.schedule("*/1 * * * *", function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, app.runNotificationCheck()];
@@ -62,3 +62,10 @@ node_cron_1.default.schedule("*/5 * * * *", function () { return __awaiter(void 
         }
     });
 }); });
+// async function test(): Promise<void> {
+//     const tickerSPY = new FinvizService('SPY');
+//     await tickerSPY.setMetrics();
+//     console.log(JSON.stringify(tickerSPY.metrics));
+//     console.log(JSON.stringify(tickerSPY.metrics.Change));
+// }
+// test();
