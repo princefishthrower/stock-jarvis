@@ -39,99 +39,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var FinvizService_1 = __importDefault(require("./services/FinvizService"));
 var AudioHelper_1 = __importDefault(require("./helpers/AudioHelper"));
 var EmailHelper_1 = __importDefault(require("./helpers/EmailHelper"));
-var settings_json_1 = __importDefault(require("../settings.json"));
+var TextHelper_1 = __importDefault(require("./helpers/TextHelper"));
 var App = /** @class */ (function () {
     function App() {
     }
-    App.prototype.runQuarterHourReading = function () {
+    App.prototype.runAudioUpdate = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var now, hour, minute, textToRead, tickerData, direction;
+            var audioUpdateText;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        now = new Date();
-                        hour = now.getHours();
-                        minute = now.getMinutes();
-                        textToRead = "It is " + hour.toString() + " " + minute.toString() + ". ";
-                        if (hour === 9 && minute === 0) {
-                            textToRead +=
-                                "Good morning, " +
-                                    settings_json_1.default.username +
-                                    ". Premarket trading is open. ";
-                        }
-                        else if (hour === 9 && minute === 30) {
-                            textToRead += "Normal trading hours have begun. ";
-                        }
-                        else if (hour === 16 && minute === 0) {
-                            textToRead += "Normal trading hours have closed. ";
-                        }
-                        else if (hour === 18 && minute === 0) {
-                            textToRead += "After hours trading has just closed. ";
-                        }
-                        else if (hour > 18) {
-                            textToRead += "After hours trading has closed. ";
-                        }
-                        tickerData = new FinvizService_1.default(settings_json_1.default.audioUpdate.tickers[0]);
-                        return [4 /*yield*/, tickerData.setMetrics()];
+                    case 0: return [4 /*yield*/, TextHelper_1.default.buildAudioUpdateText()];
                     case 1:
-                        _a.sent();
-                        direction = tickerData.metrics.Change &&
-                            tickerData.metrics.Change.length > 0 &&
-                            tickerData.metrics.Change[0] === "-"
-                            ? "down"
-                            : "up";
-                        textToRead +=
-                            settings_json_1.default.audioUpdate.tickers[0] +
-                                " is trading " +
-                                direction +
-                                " " +
-                                tickerData.metrics.Change.slice(1, tickerData.metrics.Change.length) +
-                                ", at " +
-                                tickerData.metrics.Price +
-                                ". ";
-                        return [4 /*yield*/, AudioHelper_1.default.createMP3(textToRead)];
-                    case 2:
-                        _a.sent();
-                        return [4 /*yield*/, AudioHelper_1.default.emitMP3()];
-                    case 3:
-                        _a.sent();
+                        audioUpdateText = _a.sent();
+                        AudioHelper_1.default.createMP3(audioUpdateText);
                         return [2 /*return*/];
                 }
             });
         });
     };
-    App.prototype.runNotificationCheck = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var notificationTickers;
-            var _this = this;
-            return __generator(this, function (_a) {
-                notificationTickers = settings_json_1.default.notificationUpdate.notificationTickers;
-                notificationTickers.forEach(function (notificationTicker) { return __awaiter(_this, void 0, void 0, function () {
-                    var tickerData, price;
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0:
-                                tickerData = new FinvizService_1.default(notificationTicker.ticker);
-                                return [4 /*yield*/, tickerData.setMetrics()];
-                            case 1:
-                                _a.sent();
-                                price = parseFloat(tickerData.metrics.Price);
-                                if (price > notificationTicker.abovePrice) {
-                                    EmailHelper_1.default.sendNotificationEmail(notificationTicker.ticker, "above", notificationTicker.abovePrice.toString(), tickerData.metrics.Price, (notificationTicker.aboveMessage = undefined !== null && undefined !== void 0 ? undefined : ""));
-                                }
-                                if (price < notificationTicker.belowPrice) {
-                                    EmailHelper_1.default.sendNotificationEmail(notificationTicker.ticker, "below", notificationTicker.belowPrice.toString(), tickerData.metrics.Price, (notificationTicker.belowMessage = undefined !== null && undefined !== void 0 ? undefined : ""));
-                                }
-                                return [2 /*return*/];
-                        }
-                    });
-                }); });
-                return [2 /*return*/];
-            });
-        });
+    App.prototype.runNotificationUpdate = function () {
+        EmailHelper_1.default.sendAllNotificationEmails();
     };
     return App;
 }());

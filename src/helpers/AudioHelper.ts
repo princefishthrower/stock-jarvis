@@ -24,9 +24,10 @@ export default class AudioHelper {
     
         const writeFile = util.promisify(fs.writeFile);
     
+        // wait until file is completely written
         await writeFile(AudioHelper.mp3FilePath, response.audioContent, "binary");
-      }
-      public static async emitMP3() {
+
+        // then read it!
         spawn(env.MP3_COMMAND, [AudioHelper.mp3FilePath]);
       }
 }

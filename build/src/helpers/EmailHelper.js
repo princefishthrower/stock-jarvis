@@ -35,13 +35,42 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+var FinvizService_1 = __importDefault(require("../services/FinvizService"));
+var settings_json_1 = __importDefault(require("../../settings.json"));
 var nodemailer = require("nodemailer");
 var google = require("googleapis").google;
 var OAuth2 = google.auth.OAuth2;
 var EmailHelper = /** @class */ (function () {
     function EmailHelper() {
     }
+    EmailHelper.sendAllNotificationEmails = function () {
+        var _this = this;
+        var notificationTickers = settings_json_1.default.notificationUpdate.notificationTickers;
+        notificationTickers.forEach(function (notificationTicker) { return __awaiter(_this, void 0, void 0, function () {
+            var tickerData, price;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        tickerData = new FinvizService_1.default(notificationTicker.ticker);
+                        return [4 /*yield*/, tickerData.setMetrics()];
+                    case 1:
+                        _a.sent();
+                        price = parseFloat(tickerData.metrics.Price);
+                        if (price > notificationTicker.abovePrice) {
+                            this.sendNotificationEmail(notificationTicker.ticker, "above", notificationTicker.abovePrice.toString(), tickerData.metrics.Price, (notificationTicker.aboveMessage = undefined !== null && undefined !== void 0 ? undefined : ""));
+                        }
+                        if (price < notificationTicker.belowPrice) {
+                            this.sendNotificationEmail(notificationTicker.ticker, "below", notificationTicker.belowPrice.toString(), tickerData.metrics.Price, (notificationTicker.belowMessage = undefined !== null && undefined !== void 0 ? undefined : ""));
+                        }
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+    };
     EmailHelper.sendNotificationEmail = function (ticker, direction, notificationPrice, currentPrice, additionalMessage) {
         return __awaiter(this, void 0, void 0, function () {
             var accessToken, smtpTransport, mailOptions;
