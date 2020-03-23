@@ -66,19 +66,15 @@ var AudioHelper = /** @class */ (function () {
                     case 1:
                         response = (_a.sent())[0];
                         writeFile = util_1.default.promisify(fs_1.default.writeFile);
+                        // wait until file is completely written
                         return [4 /*yield*/, writeFile(AudioHelper.mp3FilePath, response.audioContent, "binary")];
                     case 2:
+                        // wait until file is completely written
                         _a.sent();
+                        // then read it!
+                        spawn(_env_json_1.default.MP3_COMMAND, [AudioHelper.mp3FilePath]);
                         return [2 /*return*/];
                 }
-            });
-        });
-    };
-    AudioHelper.emitMP3 = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                spawn(_env_json_1.default.MP3_COMMAND, [AudioHelper.mp3FilePath]);
-                return [2 /*return*/];
             });
         });
     };

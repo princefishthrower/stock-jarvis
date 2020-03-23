@@ -1,6 +1,6 @@
 {
     "username": "Chris",
-    "audioUpdate": { "tickers": ["SPY"], "minuteInterval": 15 },
+    "audioUpdate": { "tickers": ["SPY", "VIXY"], "minuteInterval": 15 },
     "notificationUpdate": {
         "notificationTickers": [
             {
@@ -10,13 +10,18 @@
             },
             {
                 "ticker": "UBER",
-                "belowPrice": 20.00,
+                "belowPrice": 15.00,
                 "abovePrice": 23.00
             },
             {
                 "ticker": "LYFT",
-                "belowPrice": 20.00,
+                "belowPrice": 15.00,
                 "abovePrice": 23.00
+            },
+            {
+                "ticker": "VIXY",
+                "belowPrice": 30.00,
+                "abovePrice": 50.00
             },
             {
                 "ticker": "V",

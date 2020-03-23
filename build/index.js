@@ -42,28 +42,29 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var node_cron_1 = __importDefault(require("node-cron"));
 var App_1 = __importDefault(require("./src/App"));
 var settings_json_1 = __importDefault(require("./settings.json"));
+var _env_json_1 = __importDefault(require("./src/env/.env.json"));
 // The initial bootstrap class
 var app = new App_1.default();
 // Raspberry Pi system timezone is in EST, same as the market
-// “At every nth minute past every hour from 9 through 18 on every day-of-week from Monday through Friday.”
-node_cron_1.default.schedule("*/" + settings_json_1.default.audioUpdate.minuteInterval + " 9-18 * * 1-5", function () { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, app.runQuarterHourReading()];
-            case 1:
-                _a.sent();
-                return [2 /*return*/];
-        }
-    });
-}); });
-// “At every nth minute past every hour from 9 through 18 on every day-of-week from Monday through Friday.”
-node_cron_1.default.schedule("*/" + settings_json_1.default.notificationUpdate.minuteInterval + " 9-18 * * 1-5", function () { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, app.runNotificationCheck()];
-            case 1:
-                _a.sent();
-                return [2 /*return*/];
-        }
-    });
-}); });
+if (_env_json_1.default.NODE_ENV === "DEVELOP") {
+    app.runAudioUpdate();
+}
+else {
+    // “At every nth minute past every hour from 9 through 18 on every day-of-week from Monday through Friday.”
+    node_cron_1.default.schedule("*/" + settings_json_1.default.audioUpdate.minuteInterval + " 9-18 * * 1-5", function () { return __awaiter(void 0, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            // delay by 1.5 minutes so finviz is updated by then
+            setTimeout(function () {
+                app.runAudioUpdate();
+            }, 90000);
+            return [2 /*return*/];
+        });
+    }); });
+    // “At every nth minute past every hour from 9 through 18 on every day-of-week from Monday through Friday.”
+    node_cron_1.default.schedule("*/" + settings_json_1.default.notificationUpdate.minuteInterval + " 9-18 * * 1-5", function () { return __awaiter(void 0, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            app.runNotificationUpdate();
+            return [2 /*return*/];
+        });
+    }); });
+}
