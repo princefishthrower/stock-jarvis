@@ -18,5 +18,8 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
+            source /home/pi/.profile
             cd ${{ secrets.DIRECTORY }}
             git pull
+            forever restart build/index.js
+            echo 'Forever successfully restarted!'
