@@ -20,7 +20,7 @@
             },
             {
                 "ticker": "V",
-                "belowPrice": 140.00,
+                "belowPrice": 130.00,
                 "abovePrice": 178.35,
                 "aboveMessage": "This is above your average cost on Robinhood! Sell that shit!",
                 "belowMessage": "THE END IS NIGH! CAPITULATION!"
