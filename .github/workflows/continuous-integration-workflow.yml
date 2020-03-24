@@ -10,12 +10,14 @@ jobs:
     name: build
     runs-on: ubuntu-latest
     steps:
-      - name: Install NPM modules
-        script: npm install
-      - name: Build for production
-        script: cp src/env/.env.production.json src/env/.env.json && tsc;
+      - name: Install NPM modules and build for production
+      - uses: actions/checkout@master
+        run: |
+          npm install
+          cp src/env/.env.production.json src/env/.env.json
+          tsc
       - name: Pull this repository to the server
-        uses: appleboy/ssh-action@master
+      - uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
