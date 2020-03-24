@@ -11,12 +11,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - name: Install NPM modules and build for production
-      - shell: bash
+      - name: Install NPM modules
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '10.19.0'
+      - run: npm install
+      - name: Install NPM modules
         run: |
           npm install
           cp src/env/.env.production.json src/env/.env.json
           tsc
+      - shell: bash
       - name: Pull this repository to the server
         uses: appleboy/ssh-action@master
         with:
