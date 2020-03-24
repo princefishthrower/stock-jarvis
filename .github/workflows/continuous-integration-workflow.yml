@@ -28,8 +28,9 @@ jobs:
           username: ${{ secrets.USER }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          source: "main/build"
-          target: ${{ secrets.BUILD_DIRECTORY }}
+          source: "main/build/**"
+          target: "/home/pi/projects/stock-jarvis"
+          overwrite: true
       - name: Restart node forever on the server via SSH
         uses: appleboy/ssh-action@master
         with:
