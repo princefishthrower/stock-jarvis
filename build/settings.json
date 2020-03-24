@@ -6,7 +6,9 @@
             {
                 "ticker": "SPY",
                 "belowPrice": 215.00,
-                "abovePrice": 240.00
+                "abovePrice": 250.00,
+                "aboveMessage": "SPY is printing! Get rid of those puts!",
+                "belowMessage": "SPY is dying! Your puts are printing!"
             },
             {
                 "ticker": "UBER",
