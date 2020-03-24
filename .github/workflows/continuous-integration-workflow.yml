@@ -13,14 +13,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          path: main
+          path: github-workflow-artifacts
       - name: Install NPM modules, copy proper production environment, and compile typescript
         uses: actions/setup-node@v1
         with:
           node-version: '10.19.0'
-      - run: cd main && npm install
-      - run: cp main/src/env/.env.production.json main/src/env/.env.json
-      - run: cd main && tsc --build tsconfig.json
+      - run: cd github-workflow-artifacts && npm install
+      - run: cp github-workflow-artifacts/src/env/.env.production.json github-workflow-artifacts/src/env/.env.json
+      - run: cd github-workflow-artifacts && tsc --build tsconfig.json
       - name: Copy build directory to the server
         uses: appleboy/scp-action@master
         with:
@@ -28,7 +28,7 @@ jobs:
           username: ${{ secrets.USER }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          source: "main/build/**"
+          source: "github-workflow-artifacts/build"
           target: "/home/pi/projects/stock-jarvis"
           overwrite: true
       - name: Restart node forever on the server via SSH
@@ -40,6 +40,6 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             source /home/pi/.profile
-            cd ${{ secrets.BUILD_DIRECTORY }}
+            cd "/home/pi/projects/stock-jarvis/github-workflow-artifacts/build"
             forever restart index.js
             echo 'Forever successfully restarted!'
