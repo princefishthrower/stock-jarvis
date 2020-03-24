@@ -11,12 +11,12 @@
             {
                 "ticker": "UBER",
                 "belowPrice": 15.00,
-                "abovePrice": 23.00
+                "abovePrice": 30.00
             },
             {
                 "ticker": "LYFT",
                 "belowPrice": 15.00,
-                "abovePrice": 23.00
+                "abovePrice": 30.00
             },
             {
                 "ticker": "VIXY",
