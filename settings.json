@@ -1,6 +1,6 @@
 {
     "username": "Chris",
-    "audioUpdate": { "tickers": ["SPY", "VIXY"], "minuteInterval": 15 },
+    "audioUpdate": { "tickers": ["SPY"], "minuteInterval": 60 },
     "notificationUpdate": {
         "notificationTickers": [
             {

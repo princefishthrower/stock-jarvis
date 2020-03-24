@@ -10,7 +10,11 @@ jobs:
     name: build
     runs-on: ubuntu-latest
     steps:
-      - name: Issue git pull on server
+      - name: Install NPM modules
+        script: npm install
+      - name: Build for production
+        script: cp src/env/.env.production.json src/env/.env.json && tsc;
+      - name: Pull this repository to the server
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
