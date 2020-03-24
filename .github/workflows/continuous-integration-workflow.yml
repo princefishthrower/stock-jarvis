@@ -10,8 +10,8 @@ jobs:
     name: build
     runs-on: ubuntu-latest
     steps:
-      - name: Install NPM modules and build for production
       - uses: actions/checkout@master
+      - name: Install NPM modules and build for production
       - shell: bash
         run: |
           npm install
