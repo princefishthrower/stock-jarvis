@@ -10,18 +10,24 @@ jobs:
     name: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-      - name: Prepare env for production
-        run: |
-          cp src/env/.env.production.json src/env/.env.json
-      - shell: bash
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Install NPM modules and compile typescript
         uses: actions/setup-node@v1
         with:
           node-version: '10.19.0'
       - run: npm install
       - run: tsc
-      - name: Pull this repository to the server
+      - name: Copy build directory to the server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          source: "build"
+          target: ${{ secrets.BUILD_DIRECTORY }}
+      - name: Restart node forever on the server via SSH
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
@@ -31,6 +37,5 @@ jobs:
           script: |
             source /home/pi/.profile
             cd ${{ secrets.DIRECTORY }}
-            git pull
             forever restart build/index.js
             echo 'Forever successfully restarted!'
