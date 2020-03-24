@@ -12,8 +12,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          path: main
       - name: Install NPM modules and compile typescript
         uses: actions/setup-node@v1
         with:
@@ -27,7 +25,7 @@ jobs:
           username: ${{ secrets.USER }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          source: "main/build"
+          source: "build"
           target: ${{ secrets.BUILD_DIRECTORY }}
       - name: Restart node forever on the server via SSH
         uses: appleboy/ssh-action@master
