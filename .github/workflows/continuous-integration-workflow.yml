@@ -20,7 +20,7 @@ jobs:
           node-version: '10.19.0'
       - run: cd main
       - run: npm install
-      - run: cp src/env/.env.production.json src/env/.env.json
+      - run: cp main/src/env/.env.production.json main/src/env/.env.json
       - run: tsc --extendedDiagnostics
       - name: Copy build directory to the server
         uses: appleboy/scp-action@master
