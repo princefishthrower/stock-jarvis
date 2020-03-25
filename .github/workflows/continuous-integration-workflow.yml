@@ -41,5 +41,4 @@ jobs:
           script: |
             source /home/pi/.profile
             cd "/home/pi/projects/stock-jarvis/github-workflow-artifacts/build"
-            forever restart index.js
-            echo 'Forever successfully restarted!'
+            forever restart index.js && echo 'Forever successfully restarted!'
