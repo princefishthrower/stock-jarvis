@@ -1,7 +1,11 @@
 {
   "name": "stock-jarvis",
   "version": "1.0.0",
-  "description": "",
+  "description": "Reads out your stock quotes.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/princefishthrower/stock-jarvis"
+  },
   "main": "index.js",
   "scripts": {
     "dev": "cp src/env/.env.develop.json src/env/.env.json && tsc && node build/index.js",
@@ -22,6 +26,6 @@
     "tsc": "^1.20150623.0"
   },
   "devDependencies": {
-    "@types/node": "^13.9.2"
+    "@types/node": "^13.9.4"
   }
 }
