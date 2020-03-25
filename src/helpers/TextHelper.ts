@@ -3,17 +3,20 @@ import settings from "../../settings.json";
 
 export default class TextHelper {
     public static async buildAudioUpdateText(): Promise<string> {
-        let audioUpdateText = this.buildHourAndMinutePreamble();
 
         // Generate text for each desired ticker user has defined
-        const tickerTexts = await Promise.all(
+        let texts = await Promise.all(
             settings.audioUpdate.tickers.map(async ticker => {
                 return await this.buildTickerText(ticker);
             })
         );
-        audioUpdateText += tickerTexts.join("");
-        audioUpdateText += "Have a nice day!";
-        return audioUpdateText;
+
+        let tickerTexts = Array<string>();
+        tickerTexts.push(this.buildHourAndMinutePreamble());
+        tickerTexts.push(...texts);
+        tickerTexts.push("Have a nice day!");
+
+        return tickerTexts.join(' ');
     }
 
     public static buildHourAndMinutePreamble(): string {
@@ -51,8 +54,8 @@ export default class TextHelper {
         // determine direction to say
         const direction =
             tickerData.metrics.Change &&
-            tickerData.metrics.Change.length > 0 &&
-            tickerData.metrics.Change[0] === "-"
+                tickerData.metrics.Change.length > 0 &&
+                tickerData.metrics.Change[0] === "-"
                 ? "down"
                 : "up";
 

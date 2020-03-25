@@ -71,8 +71,8 @@ export default class EmailHelper {
             html:
                 additionalMessage !== ""
                     ? "Your additional message for this price trigger was: " +
-                      additionalMessage +
-                      "\nThis email was issued by Ye Old Stock Tracker™"
+                    additionalMessage +
+                    "\nThis email was issued by Ye Old Stock Tracker™"
                     : "No additional message tied to this price trigger. This email was issued by Ye Old Stock Tracker™"
         };
 
