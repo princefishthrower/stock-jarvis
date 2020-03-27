@@ -1,3 +1,4 @@
 node_modules
 build
 src/env/.env.json
+audio/audio.mp3

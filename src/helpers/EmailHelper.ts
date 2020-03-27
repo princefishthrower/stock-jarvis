@@ -1,6 +1,7 @@
-import FinvizService from "../services/FinvizService";
+import FinvizTickerService from "../services/TickerServices/FinvizTickerService";
 import settings from "../../settings.json";
 import INotificationTicker from "../interfaces/INotificationTicker";
+import { createTickerService } from '../services/TickerServices/utils/Utils';
 const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
 const OAuth2 = google.auth.OAuth2;
@@ -11,16 +12,16 @@ export default class EmailHelper {
             settings.notificationUpdate.notificationTickers;
 
         notificationTickers.forEach(async notificationTicker => {
-            const tickerData = new FinvizService(notificationTicker.ticker);
-            await tickerData.setMetrics();
-            const price = parseFloat(tickerData.metrics.Price);
+            const finvizTickerService = createTickerService(FinvizTickerService, notificationTicker.ticker);
+            await finvizTickerService.setMetrics();
+            const price = parseFloat(finvizTickerService.metrics.Price);
 
             if (price > notificationTicker.abovePrice) {
                 this.sendNotificationEmail(
                     notificationTicker.ticker,
                     "above",
                     notificationTicker.abovePrice.toString(),
-                    tickerData.metrics.Price,
+                    finvizTickerService.metrics.Price,
                     (notificationTicker.aboveMessage = undefined ?? "")
                 );
             }
@@ -29,7 +30,7 @@ export default class EmailHelper {
                     notificationTicker.ticker,
                     "below",
                     notificationTicker.belowPrice.toString(),
-                    tickerData.metrics.Price,
+                    finvizTickerService.metrics.Price,
                     (notificationTicker.belowMessage = undefined ?? "")
                 );
             }
