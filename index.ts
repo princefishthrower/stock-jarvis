@@ -13,10 +13,7 @@ if (env.NODE_ENV === "DEVELOP") {
     // “At every nth minute past every hour from 9 through 18 on every day-of-week from Monday through Friday.”
     const audioUpdateMinuteInterval = settings.audioUpdate.minuteInterval >= 60 ? "0" : "/" + settings.audioUpdate.minuteInterval.toString();
     cron.schedule(audioUpdateMinuteInterval + " 9-18 * * 1-5", async () => {
-        // delay by 1.5 minutes so finviz is updated by then
-        setTimeout(() => {
-            app.runAudioUpdate();
-        }, 90000);    
+        app.runAudioUpdate();
     });
 
     // “At every nth minute past every hour from 9 through 18 on every day-of-week from Monday through Friday.”

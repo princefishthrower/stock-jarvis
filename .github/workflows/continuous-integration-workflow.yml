@@ -1,4 +1,4 @@
-name: Deploy To Server
+name: Continuous Deployment
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: build
+    name: Build and Deploy To Server
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

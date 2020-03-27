@@ -28,6 +28,6 @@ export default class AudioHelper {
         await writeFile(AudioHelper.mp3FilePath, response.audioContent, "binary");
 
         // then read it!
-        spawn(env.MP3_COMMAND, [AudioHelper.mp3FilePath]);
+        spawn(env.OPEN_MP3_COMMAND, [AudioHelper.mp3FilePath]);
     }
 }
