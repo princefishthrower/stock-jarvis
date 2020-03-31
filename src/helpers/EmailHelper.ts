@@ -22,7 +22,7 @@ export default class EmailHelper {
                     "above",
                     notificationTicker.abovePrice.toString(),
                     finvizTickerService.metrics.Price,
-                    (notificationTicker.aboveMessage = undefined ?? "")
+                    notificationTicker.aboveMessage
                 );
             }
             if (price < notificationTicker.belowPrice) {
@@ -31,7 +31,7 @@ export default class EmailHelper {
                     "below",
                     notificationTicker.belowPrice.toString(),
                     finvizTickerService.metrics.Price,
-                    (notificationTicker.belowMessage = undefined ?? "")
+                    notificationTicker.belowMessage
                 );
             }
         });

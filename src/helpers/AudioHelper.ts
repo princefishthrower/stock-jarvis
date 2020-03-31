@@ -1,5 +1,4 @@
 import fs from "fs";
-import util from "util";
 import textToSpeech from "@google-cloud/text-to-speech";
 import env from '../env/.env.json';
 
@@ -7,7 +6,8 @@ const spawn = require("child_process").spawn;
 
 export default class AudioHelper {
     public static readonly client = new textToSpeech.TextToSpeechClient();
-    public static readonly mp3FilePath = "audio/audio.mp3";
+    public static readonly folderPath = "audio";
+    public static readonly mp3FilePath = AudioHelper.folderPath + "/audio.mp3";
 
     public static async createMP3(textToRead: string): Promise<void> {
         const request = {
@@ -22,10 +22,9 @@ export default class AudioHelper {
 
         const [response] = await AudioHelper.client.synthesizeSpeech(request);
 
-        const writeFile = util.promisify(fs.writeFile);
-
-        // wait until file is completely written
-        await writeFile(AudioHelper.mp3FilePath, response.audioContent, "binary");
+        // wait until folder is created and file is completely written
+        await fs.promises.mkdir(AudioHelper.folderPath, { recursive: true });
+        await fs.promises.writeFile(AudioHelper.mp3FilePath, response.audioContent, "binary");
 
         // then read it!
         spawn(env.OPEN_MP3_COMMAND, [AudioHelper.mp3FilePath]);

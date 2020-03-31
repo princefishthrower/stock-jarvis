@@ -13,17 +13,23 @@
             {
                 "ticker": "UBER",
                 "belowPrice": 15.00,
-                "abovePrice": 30.00
+                "abovePrice": 30.00,
+                "aboveMessage": "",
+                "belowMessage": ""
             },
             {
                 "ticker": "LYFT",
                 "belowPrice": 15.00,
-                "abovePrice": 30.00
+                "abovePrice": 30.00,
+                "aboveMessage": "",
+                "belowMessage": ""
             },
             {
                 "ticker": "VIXY",
                 "belowPrice": 30.00,
-                "abovePrice": 50.00
+                "abovePrice": 50.00,
+                "aboveMessage": "",
+                "belowMessage": ""
             },
             {
                 "ticker": "V",
