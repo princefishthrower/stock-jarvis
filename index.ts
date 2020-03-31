@@ -12,13 +12,13 @@ if (env.NODE_ENV === "DEVELOP") {
 } else {
     // “At every nth minute past every hour from 9 through 18 on every day-of-week from Monday through Friday.”
     const audioUpdateMinuteInterval = settings.audioUpdate.minuteInterval >= 60 ? "0" : "/" + settings.audioUpdate.minuteInterval.toString();
-    cron.schedule("0 9-18 * * 1-5", async () => {
+    cron.schedule(audioUpdateMinuteInterval + " 9-18 * * 1-5", async () => {
         app.runAudioUpdate();
     });
 
     // “At every nth minute past every hour from 9 through 18 on every day-of-week from Monday through Friday.”
     const notificationUpdateMinuteInterval = settings.notificationUpdate.minuteInterval >= 60 ? "0" : "/" + settings.notificationUpdate.minuteInterval.toString();
-    cron.schedule("15 9-18 * * 1-5", async () => {
+    cron.schedule(notificationUpdateMinuteInterval + " 9-18 * * 1-5", async () => {
         app.runNotificationUpdate();
     });
 }
