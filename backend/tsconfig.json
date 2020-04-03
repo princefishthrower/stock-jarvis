@@ -1,6 +1,8 @@
 {
     "compilerOptions": {
-        "target": "es5",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "target": "es6",
         "module": "commonjs",
         "outDir": "./build/",
         "strict": true,
@@ -8,5 +10,5 @@
         "resolveJsonModule": true
     },
     "exclude": ["node_modules"],
-    "include": ["*.ts", "src/App.ts"]
+    "include": ["src/**/*.ts"]
 }

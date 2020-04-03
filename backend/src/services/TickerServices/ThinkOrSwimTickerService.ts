@@ -1,4 +1,5 @@
-import { FinvizMetricNames } from "../../types/FinvizMetricData";
+import { FinvizMetricNames } from "../../types/FinvizMetricNames";
+import { ThinkOrSwimMetricNames } from "../../types/ThinkOrSwimMetricNames";
 import ITickerService from "../../interfaces/ITickerService";
 
 const fetch = require("node-fetch");
@@ -6,20 +7,40 @@ const fetch = require("node-fetch");
 export default class ThinkOrSwimTickerService implements ITickerService {
     public ticker: string;
     public url: string;
-    public metrics: Record<FinvizMetricNames, string>;
+    public metrics: Record<FinvizMetricNames|ThinkOrSwimMetricNames, string>;
+    public static readonly bearerToken = process.env.THINK_OR_SWIM_BEARER_TOKEN
 
     constructor(ticker: string) {
         this.ticker = ticker.toUpperCase();
-        // TODO: get url from ThinkOrSwim
-        this.url = "DEFINE ME";
-        this.metrics = { Price: "", Change: "", "P/E": "", EPS: "" };
+        this.url = "https://api.tdameritrade.com/v1/marketdata/quotes?symbol=" + this.ticker;
+        this.metrics = { Price: "", Change: "", "P/E": "", EPS: "", regularMarketLastPrice: "", netPercentChangeInDouble: "", peRatio: "" };
     }
     public async setMetrics(): Promise<void> {
-        await fetch(this.url)
-            .then((res: any) => res.text())
-            .then((body: string) => {
-                // Get tickers we need to fulfill FinvizMetricNames and set them here
-                // (Should be a lot easier since its a real API and we don't need to scrape)
+        try {
+        await fetch(this.url, {
+            method: 'GET',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Authorization': ThinkOrSwimTickerService.bearerToken,
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((res: any) => res.json())
+            .then((body: any) => {
+                if ('error' in body) {
+                    // do something
+                } else {
+                    const tickerData = body[this.ticker];
+
+                    // TODO: fix! Do this dynamically! (how can we reduce two sources, finviz, adn thinkorswim to the same generic type?)
+                    this.metrics.regularMarketLastPrice = tickerData.regularMarketLastPrice.toString();
+                    this.metrics.netPercentChangeInDouble = tickerData.netPercentChangeInDouble.toString();
+                    this.metrics.peRatio = tickerData.peRatio.toString();
+                }
             });
+        } catch (err) {
+            console.log(err);
+        }
     }
 }

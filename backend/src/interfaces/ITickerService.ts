@@ -1,7 +1,8 @@
-import { FinvizMetricNames } from "../types/FinvizMetricData";
+import { FinvizMetricNames } from "../types/FinvizMetricNames";
+import { ThinkOrSwimMetricNames } from "../types/ThinkOrSwimMetricNames";
 
 export default interface ITickerService {
     ticker: string;
-    metrics: Record<FinvizMetricNames, string>;
+    metrics: Record<FinvizMetricNames|ThinkOrSwimMetricNames, string>;
     setMetrics(): Promise<void>;
 }

@@ -1,8 +1,11 @@
 {
     "username": "Chris",
-    "audioUpdate": { "tickers": ["SPY"], "minuteInterval": 15 },
-    "notificationUpdate": {
-        "notificationTickers": [
+    "audioUpdateSettings": { 
+        "tickers": ["SPY"], 
+        "interval": 15 
+    },
+    "notificationUpdateSettings": {
+        "tickers": [
             {
                 "ticker": "SPY",
                 "belowPrice": 215.00,
@@ -46,6 +49,6 @@
                 "belowMessage": "THE END IS NIGH! CAPITULATION!"
             }
         ],
-        "minuteInterval": 15
+        "interval": 15
     }
 }

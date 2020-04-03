@@ -1,15 +1,15 @@
 import FinvizTickerService from "../services/TickerServices/FinvizTickerService";
-import settings from "../../settings.json";
-import INotificationTicker from "../interfaces/INotificationTicker";
+import INotificationTicker from "../../../shared/interfaces/INotificationTicker";
 import { createTickerService } from '../services/TickerServices/utils/Utils';
+import IUserSettings from "../../../shared/interfaces/IUserSettings";
 const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
 const OAuth2 = google.auth.OAuth2;
 
 export default class EmailHelper {
-    public static sendAllNotificationEmails() {
+    public static sendAllNotificationEmails(settings: IUserSettings) {
         const notificationTickers: Array<INotificationTicker> =
-            settings.notificationUpdate.notificationTickers;
+            settings.notificationUpdateSettings.tickers;
 
         notificationTickers.forEach(async notificationTicker => {
             const finvizTickerService = createTickerService(FinvizTickerService, notificationTicker.ticker);

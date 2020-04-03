@@ -1,5 +1,6 @@
-import { FinvizMetricNames } from "../../types/FinvizMetricData";
-import ITickerService from '../../interfaces/ITickerService';
+import { FinvizMetricNames } from "../../types/FinvizMetricNames";
+import ITickerService from "../../interfaces/ITickerService";
+import { ThinkOrSwimMetricNames } from "../../types/ThinkOrSwimMetricNames";
 
 const JSSoup = require("jssoup").default;
 const fetch = require("node-fetch");
@@ -7,16 +8,22 @@ const fetch = require("node-fetch");
 export default class FinvizTickerService implements ITickerService {
     public ticker: string;
     public url: string;
-    public metrics: Record<FinvizMetricNames, string>;
+    public metrics: Record<FinvizMetricNames | ThinkOrSwimMetricNames, string>;
 
-    private static readonly noResultsText: string =
-        "No results found for";
+    private static readonly noResultsText: string = "No results found for";
 
     constructor(ticker: string) {
         this.ticker = ticker.toUpperCase();
-        this.url =
-            "http://finviz.com/quote.ashx?t=" + this.ticker;
-        this.metrics = { Price: "", Change: "", "P/E": "", EPS: "" };
+        this.url = "http://finviz.com/quote.ashx?t=" + this.ticker;
+        this.metrics = {
+            Price: "",
+            Change: "",
+            "P/E": "",
+            EPS: "",
+            regularMarketLastPrice: "",
+            netPercentChangeInDouble: "",
+            peRatio: ""
+        };
     }
     public async setMetrics() {
         await fetch(this.url)

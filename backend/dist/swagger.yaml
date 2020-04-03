@@ -1,0 +1,11 @@
+basePath: null
+definitions: {}
+info:
+    description: 'Reads out your stock quotes.'
+    license:
+        name: ISC
+    title: stock-jarvis
+    version: 1.0.0
+paths: {}
+swagger: '2.0'
+securityDefinitions: {}

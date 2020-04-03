@@ -1,25 +1,28 @@
 import FinvizTickerService from "../services/TickerServices/FinvizTickerService";
-import settings from "../../settings.json";
+import ThinkOrSwimTickerService from "../services/TickerServices/ThinkOrSwimTickerService";
 import { createTickerService } from "../services/TickerServices/utils/Utils";
+import IUserSettings from "../../../shared/interfaces/IUserSettings";
 
 export default class TextHelper {
-    public static async buildAudioUpdateText(): Promise<string> {
+    public static async buildAudioUpdateText(
+        settings: IUserSettings
+    ): Promise<string> {
         // Generate text for each desired ticker user has defined
         let texts = await Promise.all(
-            settings.audioUpdate.tickers.map(async ticker => {
+            settings.audioUpdateSettings.tickers.map(async ticker => {
                 return await this.buildTickerText(ticker);
             })
         );
 
         let tickerTexts = Array<string>();
-        tickerTexts.push(this.buildHourAndMinutePreamble());
+        tickerTexts.push(this.buildHourAndMinutePreamble(settings));
         tickerTexts.push(...texts);
         tickerTexts.push("Have a nice day!");
 
         return tickerTexts.join(" ");
     }
 
-    public static buildHourAndMinutePreamble(): string {
+    public static buildHourAndMinutePreamble(settings: IUserSettings): string {
         const now = new Date();
         const hour = now.getHours();
         const minute = now.getMinutes();
@@ -36,7 +39,7 @@ export default class TextHelper {
         if (hour === 9 && minute === 0) {
             preamble +=
                 "Good morning, " +
-                settings.username +
+                settings.name +
                 ". Premarket trading is open. ";
         } else if (hour === 9 && minute === 30) {
             preamble += "Normal trading hours have begun. ";
@@ -52,29 +55,46 @@ export default class TextHelper {
 
     public static async buildTickerText(ticker: string): Promise<string> {
         let direction, percentage;
-        const finvizTickerService = createTickerService(
-            FinvizTickerService,
+        // const finvizTickerService = createTickerService(
+        //     FinvizTickerService,
+        //     ticker
+        // );
+        // await finvizTickerService.setMetrics();
+        // // determine direction and percentage to parse to say
+        // if (finvizTickerService.metrics.Change[0] === "-") {
+        //     direction = "down";
+        //     percentage = finvizTickerService.metrics.Change.slice(
+        //         1,
+        //         finvizTickerService.metrics.Change.length
+        //     );
+        // } else {
+        //     direction = "up";
+        //     percentage = finvizTickerService.metrics.Change;
+        // }
+
+        // const priceParts = finvizTickerService.metrics.Price.split(".");
+
+        const thinkOrSwimService = createTickerService(
+            ThinkOrSwimTickerService,
             ticker
         );
-
-        // TODO:
-        // const tickerData = createTickerService(ThinkOrSwimService,ticker);
-
-        await finvizTickerService.setMetrics();
+        thinkOrSwimService.setMetrics();
 
         // determine direction and percentage to parse to say
-        if (finvizTickerService.metrics.Change[0] === "-") {
+        if (thinkOrSwimService.metrics.netPercentChangeInDouble[0] === "-") {
             direction = "down";
-            percentage = finvizTickerService.metrics.Change.slice(
+            percentage = thinkOrSwimService.metrics.netPercentChangeInDouble.slice(
                 1,
-                finvizTickerService.metrics.Change.length
+                thinkOrSwimService.metrics.netPercentChangeInDouble.length
             );
         } else {
             direction = "up";
-            percentage = finvizTickerService.metrics.Change;
+            percentage = thinkOrSwimService.metrics.netPercentChangeInDouble;
         }
 
-        const priceParts = finvizTickerService.metrics.Price.split(".");
+        const priceParts = thinkOrSwimService.metrics.regularMarketLastPrice.split(
+            "."
+        );
 
         const directionalText =
             ticker +
