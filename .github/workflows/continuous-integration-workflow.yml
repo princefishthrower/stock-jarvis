@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: Build and Deploy To Server
+    name: Build and Deploy To Server (Backend)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -18,9 +18,9 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '10.19.0'
-      - run: cd github-workflow-artifacts && npm install
-      - run: cp github-workflow-artifacts/src/env/.env.production.json github-workflow-artifacts/src/env/.env.json
-      - run: cd github-workflow-artifacts && tsc --build tsconfig.json
+      - run: cd github-workflow-artifacts/backend && npm install
+      - run: cp github-workflow-artifacts/backend/src/env/.env.production.json github-workflow-artifacts/backend/src/env/.env.json
+      - run: cd github-workflow-artifacts/backend && tsc --build tsconfig.json
       - name: Copy build directory to the server
         uses: appleboy/scp-action@master
         with:
@@ -28,7 +28,7 @@ jobs:
           username: ${{ secrets.USER }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          source: "github-workflow-artifacts/build"
+          source: "github-workflow-artifacts//backend/build"
           target: "/home/pi/projects/stock-jarvis"
           overwrite: true
       - name: Restart (or start when restart fails) node forever on the server via SSH
@@ -40,7 +40,7 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             source /home/pi/.profile
-            cd "/home/pi/projects/stock-jarvis/github-workflow-artifacts/build"
+            cd "/home/pi/projects/stock-jarvis/github-workflow-artifacts/build/backend"
             forever restart index.js || forever start index.js && echo 'Forever successfully running!'
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2.0.0

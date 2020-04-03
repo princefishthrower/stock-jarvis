@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@types/node": "^13.9.4",
+    "swagger": "^0.7.5",
     "tsc": "^1.20150623.0",
     "tslint": "^6.1.0",
     "typescript": "^3.8.3"
