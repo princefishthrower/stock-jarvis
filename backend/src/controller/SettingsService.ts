@@ -4,8 +4,8 @@ import Users from "../model/Users";
 import IUserSettings from "../../../shared/interfaces/IUserSettings";
 import { validateSettingsObject as isValidSettingsObject } from "../helpers/UserSettingsHelper";
 
-@Path("/get-settings/email/:email/token/:token")
 export default class SettingsService {
+    @Path("/get-settings/email/:email/token/:token")
     @GET
     async getSettings(
         @PathParam("email") email: string,
@@ -30,6 +30,7 @@ export default class SettingsService {
         
     }
 
+    @Path("/set-settings/email/:email/token/:token")
     @POST
     async setSettings(
         @FormParam("email") email: string,
