@@ -14,7 +14,6 @@ const sequelize = new Sequelize(
 class Users extends Model {
     public id!: number;
     public email!: string;
-    public token!: string;
     public settings!: IUserSettings;
 
     public readonly createdAt!: Date;
@@ -32,15 +31,6 @@ Users.init(
             type: DataTypes.STRING(255),
             allowNull: false,
             unique: true
-        },
-        token: {
-            type: DataTypes.STRING(255),
-            allowNull: false,
-            unique: true
-        },
-        name: {
-            type: DataTypes.STRING(128),
-            allowNull: false
         },
         settings: {
             type: DataTypes.JSON,
