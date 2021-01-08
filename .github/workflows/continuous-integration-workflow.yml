@@ -28,7 +28,7 @@ jobs:
           username: ${{ secrets.USER }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          source: "github-workflow-artifacts//backend/build"
+          source: "github-workflow-artifacts/backend/build"
           target: "/home/pi/projects/stock-jarvis"
           overwrite: true
       - name: Restart (or start when restart fails) node forever on the server via SSH
