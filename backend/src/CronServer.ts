@@ -3,6 +3,7 @@ import CronDispatcher from "./services/Cron/CronDispatcher";
 import env from "./env/.env.json";
 import Users from "./model/Users";
 import { Op } from "sequelize";
+import testSettings from "../src/data/example-settings.json";
 
 // The initial bootstrap class
 const cronDispatcher = new CronDispatcher();
@@ -13,25 +14,42 @@ let cronTasks: Map<number, ScheduledTask[]> = new Map<
     ScheduledTask[]
 >();
 
-// Note that Raspberry Pi system timezone is in EST, same as the market
-if (env.NODE_ENV === "DEVELOP") {
+if (env.NODE_ENV === "IMMEDIATE") {
     async function runImmediately() {
-        const user = await Users.findByPk("1");
-        if (user) {
-            cronDispatcher.runAudioUpdate(user.settings);
-            cronDispatcher.runNotificationUpdate(user.settings);
-        }
+        // TODO: fix postgres issues (upgrade to 13)
+        // const user = await Users.findByPk("1");
+        // if (user) {
+        //     cronDispatcher.runAudioUpdate(user.settings);
+        //     cronDispatcher.runNotificationUpdate(user.settings);
+        // }
+
+        cronDispatcher.runAudioUpdate(testSettings);
+        cronDispatcher.runNotificationUpdate(testSettings);
     }
     runImmediately();
+} else if (env.NODE_ENV === "PI") {
+    // “At every nth minute past every hour from 9 through 18 on every day-of-week from Monday through Friday.”
+
+    // audio update
+    const audioUpdateMinuteInterval = testSettings.audioUpdateSettings.interval;
+    cron.schedule(audioUpdateMinuteInterval + " 9-18 * * 1-5", async () => {
+        cronDispatcher.runAudioUpdate(testSettings);
+    });
+
+    // notification update
+    const notificationUpdateMinuteInterval = testSettings.notificationUpdateSettings.interval;
+    cron.schedule(notificationUpdateMinuteInterval + " 9-18 * * 1-5", async () => {
+        cronDispatcher.runNotificationUpdate(testSettings);
+    });
 } else {
     async function registerAllCrons() {
         const allUsers = await Users.findAll();
         await setUserCrons(allUsers);
     }
 
-    // Memory safely sets crons for the array of given users
+    // Memory-safe setting crons for the array of given users
     async function setUserCrons(users: Array<Users>) {
-        users.forEach(user => {
+        users.forEach((user) => {
             // At most once per hour (0 in minute component) OR
             // “At every nth minute past every hour from 9 through 18 on every day-of-week from Monday through Friday.”
             const audioUpdateMinuteInterval =
@@ -64,7 +82,7 @@ if (env.NODE_ENV === "DEVELOP") {
             // this way we prevent any memory overload: every user has their tasks mapped to their IDs
             const scheduledTasks = cronTasks.get(user.id);
             if (scheduledTasks) {
-                scheduledTasks.forEach(scheduledTask => {
+                scheduledTasks.forEach((scheduledTask) => {
                     scheduledTask.destroy();
                 });
             }
@@ -76,19 +94,19 @@ if (env.NODE_ENV === "DEVELOP") {
         // first register all crons (only fires once on server start or restart)
         await registerAllCrons();
 
-        // every minute update crons for those users who updated their settings
+        // every minute, update crons for those users who updated their settings through the web UI
         cron.schedule("* * * * *", async () => {
             const oneMinuteAgoUTC = new Date(Date.now() - 60000).toUTCString();
             const updatedUsers = await Users.findAll({
                 where: {
                     updatedAt: {
-                        [Op.gte]: oneMinuteAgoUTC
-                    }
-                }
+                        [Op.gte]: oneMinuteAgoUTC,
+                    },
+                },
             });
             setUserCrons(updatedUsers);
         });
     }
-    
+
     startCronServer();
 }

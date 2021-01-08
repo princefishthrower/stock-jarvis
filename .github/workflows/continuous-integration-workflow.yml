@@ -40,8 +40,8 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             source /home/pi/.profile
-            cd "/home/pi/projects/stock-jarvis/github-workflow-artifacts/build/backend"
-            forever restart index.js || forever start index.js && echo 'Forever successfully running!'
+            cd "/home/pi/projects/stock-jarvis/github-workflow-artifacts/build/backend/src"
+            forever restart CronServer.js || forever start index.js && echo 'Forever successfully running!'
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2.0.0
         env:

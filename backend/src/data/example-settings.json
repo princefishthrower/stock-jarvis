@@ -1,54 +1,28 @@
 {
-    "username": "Chris",
-    "audioUpdateSettings": { 
-        "tickers": ["SPY"], 
-        "interval": 15 
+    "name": "Chris",
+    "audioUpdateSettings": {
+        "tickers": ["VOO", "QS", "PLUG"],
+        "interval": 15
     },
     "notificationUpdateSettings": {
         "tickers": [
             {
-                "ticker": "SPY",
-                "belowPrice": 215.00,
-                "abovePrice": 250.00,
-                "aboveMessage": "SPY is printing! Get rid of those puts!",
-                "belowMessage": "SPY is dying! Your puts are printing!"
+                "ticker": "QS",
+                "belowPrice": 40.00,
+                "abovePrice": 60.00,
+                "belowMessage": "QS has fallen below 40, time to buy?",
+                "aboveMessage": "QS is mooning again!"
             },
             {
-                "ticker": "UBER",
-                "belowPrice": 15.00,
-                "abovePrice": 30.00,
-                "aboveMessage": "",
-                "belowMessage": ""
-            },
-            {
-                "ticker": "LYFT",
-                "belowPrice": 15.00,
-                "abovePrice": 30.00,
-                "aboveMessage": "",
-                "belowMessage": ""
-            },
-            {
-                "ticker": "VIXY",
-                "belowPrice": 30.00,
+                "ticker": "PLUG",
+                "belowPrice": 33.50,
                 "abovePrice": 50.00,
-                "aboveMessage": "",
-                "belowMessage": ""
-            },
-            {
-                "ticker": "V",
-                "belowPrice": 130.00,
-                "abovePrice": 178.35,
-                "aboveMessage": "This is above your average cost on Robinhood! Sell that shit!",
-                "belowMessage": "THE END IS NIGH! CAPITULATION!"
-            },
-            {
-                "ticker": "MSFT",
-                "belowPrice": 130.00,
-                "abovePrice": 160.72,
-                "aboveMessage": "This is above your average cost on Robinhood! Sell that shit!",
-                "belowMessage": "THE END IS NIGH! CAPITULATION!"
+                "belowMessage": "PLUG below $33.50 - you're at risk of being assigned!",
+                "aboveMessage": "PLUG is mooning, no worries brethren."
             }
         ],
-        "interval": 15
+        "interval": 5,
+        "emails": true,
+        "slackMessages": true
     }
 }

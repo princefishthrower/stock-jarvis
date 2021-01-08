@@ -33,7 +33,7 @@ export default class ThinkOrSwimTickerService implements ITickerService {
                 } else {
                     const tickerData = body[this.ticker];
 
-                    // TODO: fix! Do this dynamically! (how can we reduce two sources, finviz, adn thinkorswim to the same generic type?)
+                    // TODO: fix! Do this dynamically! (how can we reduce two sources, finviz, and thinkorswim to the same generic type?)
                     this.metrics.regularMarketLastPrice = tickerData.regularMarketLastPrice.toString();
                     this.metrics.netPercentChangeInDouble = tickerData.netPercentChangeInDouble.toString();
                     this.metrics.peRatio = tickerData.peRatio.toString();

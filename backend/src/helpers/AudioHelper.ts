@@ -2,6 +2,7 @@ import fs from "fs";
 import textToSpeech from "@google-cloud/text-to-speech";
 import env from '../env/.env.json';
 
+const getMP3Duration = require('get-mp3-duration')
 const spawn = require("child_process").spawn;
 
 export default class AudioHelper {
@@ -25,8 +26,18 @@ export default class AudioHelper {
         // wait until folder is created and file is completely written
         await fs.promises.mkdir(AudioHelper.folderPath, { recursive: true });
         await fs.promises.writeFile(AudioHelper.mp3FilePath, response.audioContent, "binary");
+        const buffer = fs.readFileSync(AudioHelper.mp3FilePath);
 
-        // then read it!
-        spawn(env.OPEN_MP3_COMMAND, [AudioHelper.mp3FilePath]);
+        // little buffer for kill time
+        const duration = getMP3Duration(buffer) + 3000;
+
+        // then read it out loud!
+        const child = spawn(env.OPEN_MP3_COMMAND, [AudioHelper.mp3FilePath]);
+
+        // kill process when done
+        setTimeout(function(){
+            child.stdin.pause();
+            child.kill();
+        }, duration);
     }
 }

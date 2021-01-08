@@ -18,7 +18,7 @@ async function migrateUsersTable() {
         console.log("Users table created successfully");
         await createTestUser();
     } catch (err) {
-        console.log("An error occur while creating users table: " + err);
+        console.log("An error occur while creating the users table: " + err);
     }
 }
 
