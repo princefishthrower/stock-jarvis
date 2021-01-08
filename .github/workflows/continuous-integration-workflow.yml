@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: '10.19.0'
       - run: cd github-workflow-artifacts/backend && npm install
-      - run: cp github-workflow-artifacts/backend/src/env/.env.production.json github-workflow-artifacts/backend/src/env/.env.json
+      - run: cp github-workflow-artifacts/backend/src/env/.env.pi.json github-workflow-artifacts/backend/build/backend/src/env/.env.json
       - run: cd github-workflow-artifacts/backend && tsc --build tsconfig.json
       - name: Copy build directory to the server
         uses: appleboy/scp-action@master
@@ -40,8 +40,9 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             source /home/pi/.profile
-            cd "/home/pi/projects/stock-jarvis/github-workflow-artifacts/build/backend/src"
-            forever restart CronServer.js || forever start index.js && echo 'Forever successfully running!'
+            cd "/home/pi/projects/stock-jarvis/github-workflow-artifacts/backend/build/backend/src"
+            process=$(forever list | grep stock-jarvis | awk '{ print $2 }' | tr -d [ | tr -d ])
+            forever restart $process && echo 'Forever successfully running!'
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2.0.0
         env:
