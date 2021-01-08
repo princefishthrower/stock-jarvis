@@ -1,0 +1,28 @@
+{
+    "name": "Chris",
+    "audioUpdateSettings": {
+        "tickers": ["VOO", "QS", "PLUG"],
+        "interval": 15
+    },
+    "notificationUpdateSettings": {
+        "tickers": [
+            {
+                "ticker": "QS",
+                "belowPrice": 40.00,
+                "abovePrice": 60.00,
+                "belowMessage": "QS has fallen below 40, time to buy?",
+                "aboveMessage": "QS is mooning again!"
+            },
+            {
+                "ticker": "PLUG",
+                "belowPrice": 33.50,
+                "abovePrice": 50.00,
+                "belowMessage": "PLUG below $33.50 - you're at risk of being assigned!",
+                "aboveMessage": "PLUG is mooning, no worries brethren."
+            }
+        ],
+        "interval": 5,
+        "emails": true,
+        "slackMessages": true
+    }
+}
