@@ -4,6 +4,7 @@ import env from "./env/.env.json";
 import Users from "./model/Users";
 import { Op } from "sequelize";
 import testSettings from "../src/data/example-settings.json";
+import AudioHelper from "./helpers/AudioHelper";
 
 // The initial bootstrap class
 const cronDispatcher = new CronDispatcher();
@@ -29,6 +30,11 @@ if (env.NODE_ENV === "IMMEDIATE") {
     runImmediately();
 } else if (env.NODE_ENV === "PI") {
     // “At every nth minute past every hour from 9 through 18 on every day-of-week from Monday through Friday.”
+
+    // test audio update
+    cron.schedule("* * * * *", async () => {
+        AudioHelper.createAndReadMP3("This is the minute by minute test.");
+    });
 
     // audio update
     const audioUpdateMinuteInterval = testSettings.audioUpdateSettings.interval;
