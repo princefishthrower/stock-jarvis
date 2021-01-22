@@ -10,7 +10,7 @@ export default class AudioHelper {
     public static readonly folderPath = "audio";
     public static readonly mp3FilePath = AudioHelper.folderPath + "/audio.mp3";
 
-    public static async createMP3(textToRead: string): Promise<void> {
+    public static async createAndReadMP3(textToRead: string): Promise<void> {
         const request = {
             input: { text: textToRead },
             voice: {
