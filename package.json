@@ -20,7 +20,7 @@
     "googleapis": "^48.0.0",
     "jssoup": "0.0.11",
     "node-cron": "^2.0.3",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^3.1.1",
     "nodemailer": "^6.4.6",
     "play-sound": "^1.1.3"
   },
