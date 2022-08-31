@@ -29,7 +29,7 @@
     "googleapis": "^48.0.0",
     "jsonwebtoken": "^8.5.1",
     "jssoup": "0.0.11",
-    "moment-timezone": "^0.5.32",
+    "moment-timezone": "^0.5.35",
     "node-cron": "^2.0.3",
     "node-fetch": "^2.6.1",
     "node-mailjet": "^3.3.1",
